@@ -60,7 +60,7 @@ function Index() {
             href={LINKEDIN}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-md cta-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:opacity-90"
           >
             Connect on LinkedIn
           </a>
