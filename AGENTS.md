@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Keep the single-page portfolio translations in a shared browser-safe copy module and select language through a validated URL search parameter so shared links, metadata and the CRM demo stay aligned.
+- Keep demo account state language-neutral and translate it only when rendering so switching languages never resets pipeline progress.

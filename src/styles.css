@@ -152,19 +152,14 @@
 
   body {
     background-color: var(--color-background);
-    background-image: radial-gradient(
-      115% 70% at 50% -10%,
-      color-mix(in oklab, var(--color-accent) 22%, transparent),
-      transparent 65%
-    );
-    background-repeat: no-repeat;
     color: var(--color-foreground);
   }
 }
 
 @layer base {
   body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0; }
+  .portfolio-hero { background-color: var(--color-secondary); }
 }
 
 @utility cta-primary {
@@ -174,7 +169,7 @@
 @utility section-kicker {
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--color-primary);
 }

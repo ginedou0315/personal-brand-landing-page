@@ -1,381 +1,155 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CrmDemo } from "../components/CrmDemo";
-import {
-  ArrowUp,
-  ArrowUpRight,
-  BarChart3,
-  Check,
-  ChevronRight,
-  Copy,
-  Handshake,
-  Linkedin,
-  Mail,
-  Presentation,
-} from "lucide-react";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { ArrowDown, ArrowUp, ArrowUpRight, Check, Copy, Database, Globe2, Linkedin, Mail, Network, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { CrmDemo } from '@/components/CrmDemo';
+import { languageSearch, languages, portfolioCopy, type Language } from '@/lib/portfolio-copy';
 
-const EMAIL = "ginelle.doubek@gmail.com";
-const LINKEDIN = "https://www.linkedin.com/in/ginelledoubek";
+const EMAIL = 'ginelle.doubek@gmail.com';
+const LINKEDIN = 'https://www.linkedin.com/in/ginelledoubek';
+const toolkit = ['Salesforce', 'Power BI', 'Tableau', 'Excel', 'SQL', 'Python', 'HTML/CSS/JS', 'AI prompting'];
+const capabilityIcons = [Database, Network, Sparkles];
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Ginelle Doubek — CRM, Salesforce & Business Operations" },
-      {
-        name: "description",
-        content:
-          "I help teams turn customer data, processes and relationships into clear decisions. Open to CRM, Salesforce Admin and Sales Ops roles in Aargau/Zurich.",
-      },
-      { property: "og:title", content: "Ginelle Doubek — CRM, Salesforce & Business Operations" },
-      {
-        property: "og:description",
-        content: "I help teams turn customer data, processes and relationships into clear decisions.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+export const Route = createFileRoute('/')({
+  validateSearch: languageSearch,
+  head: ({ match }) => {
+    const copy = portfolioCopy[match.search.lang ?? 'en'];
+    return { meta: [
+      { title: copy.title }, { name: 'description', content: copy.description },
+      { property: 'og:title', content: copy.title }, { property: 'og:description', content: copy.description },
+      { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
+    ] };
+  },
   component: Index,
 });
 
-const proof = [
-  {
-    years: "10+ yrs",
-    label: "B2B sales & account management",
-    detail: "Starwood, Sheraton, Nestlé, Unilever",
-    icon: Handshake,
-  },
-  {
-    years: "3.5 yrs",
-    label: "Salesforce in daily use",
-    detail: "Accounts, leads, opportunities & pipeline across MENA at ClavigerME",
-    icon: BarChart3,
-  },
-  {
-    years: "2 yrs",
-    label: "International congress coordination",
-    detail: "Abstract programme, EULAR, Zurich",
-    icon: Presentation,
-  },
-];
-
-const toolkit = ["Salesforce", "Power BI", "Tableau", "Excel", "SQL", "Python", "HTML/CSS/JS", "AI prompting"];
-
-const learning = [
-  "Data Analytics Professional Certificate — Purdue / Simplilearn",
-  "AWS Cloud Practitioner badge",
-  "Bring Women Back to Work, Cohort 16 — AI Builder Program",
-  "Preparing for Salesforce Certified Administrator (Trailhead)",
-];
-
-function useScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-
-  useEffect(() => {
-    const update = () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0);
-      setShowBackToTop(window.scrollY > 500);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-
-  return { progress, showBackToTop };
-}
-
-function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    if (!("IntersectionObserver" in window)) {
-      setVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12 },
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`reveal ${visible ? "is-visible" : ""} ${className}`}
-      style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}
-    >
-      {children}
-    </div>
-  );
-}
-
 function Index() {
+  const { lang = 'en' } = Route.useSearch();
+  const navigate = useNavigate({ from: '/' });
+  const c = portfolioCopy[lang];
   const [activeProof, setActiveProof] = useState(0);
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
-  const { progress, showBackToTop } = useScrollProgress();
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
+  const [showTop, setShowTop] = useState(false);
+  const selectedProof = c.proof[activeProof] ?? c.proof[0];
 
+  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
   useEffect(() => {
-    if (copyState === "idle") return;
-    const timeout = window.setTimeout(() => setCopyState("idle"), 2400);
+    const update = () => setShowTop(window.scrollY > 500);
+    update(); window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, []);
+  useEffect(() => {
+    if (copyState === 'idle') return;
+    const timeout = window.setTimeout(() => setCopyState('idle'), 2400);
     return () => window.clearTimeout(timeout);
   }, [copyState]);
-
-  const handleHeroPointer = (event: PointerEvent<HTMLElement>) => {
-    if (event.pointerType === "touch") return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--pointer-x", `${event.clientX - bounds.left}px`);
-    event.currentTarget.style.setProperty("--pointer-y", `${event.clientY - bounds.top}px`);
-  };
-
   const copyEmail = async () => {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(EMAIL);
-      } else {
-        const field = document.createElement("textarea");
-        field.value = EMAIL;
-        field.style.position = "fixed";
-        field.style.opacity = "0";
-        document.body.appendChild(field);
-        field.select();
-        const copied = document.execCommand("copy");
-        field.remove();
-        if (!copied) throw new Error("Copy command unavailable");
-      }
-      setCopyState("copied");
-    } catch {
-      setCopyState("error");
-    }
+    try { await navigator.clipboard.writeText(EMAIL); setCopyState('copied'); }
+    catch { setCopyState('error'); }
   };
-
-  const backToTop = () => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  const switchLanguage = (language: Language) => {
+    void navigate({ search: { lang: language }, hash: window.location.hash.slice(1), resetScroll: false });
   };
-
-  const selectedProof = proof[activeProof]!;
 
   return (
     <>
-      <a
-        href="#main-content"
-        className="fixed left-4 top-3 z-50 -translate-y-20 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-transform focus:translate-y-0"
-      >
-        Skip to content
-      </a>
-
-      <div className="fixed inset-x-0 top-0 z-50 h-1 bg-secondary" aria-hidden="true">
-        <div className="scroll-progress h-full origin-left" style={{ transform: `scaleX(${progress})` }} />
-      </div>
-
-      <nav className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-xl" aria-label="Page sections">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-3 px-5 sm:px-8">
-          <a
-            href="#top"
-            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary font-display text-sm font-semibold text-primary-foreground transition-transform duration-300 hover:rotate-6 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            aria-label="Ginelle Doubek — back to top"
-          >
-            GD
-          </a>
-          <div className="flex items-center gap-3 sm:gap-6">
-            <a className="nav-link" href="#about">About</a>
-            <a className="nav-link" href="#toolkit">Skills</a>
-            <a className="nav-link hidden min-[380px]:inline-flex" href="#learning">Learning</a>
-            <a
-              href={LINKEDIN}
-              target="_blank"
-              rel="noreferrer"
-              className="flex size-9 items-center justify-center rounded-full border border-border text-foreground transition duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Connect with Ginelle on LinkedIn"
-            >
-              <Linkedin className="size-4" aria-hidden="true" />
-            </a>
+      <Button asChild className="fixed left-4 top-3 z-50 -translate-y-20 focus:translate-y-0"><a href="#main-content">{c.skip}</a></Button>
+      <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-xl" aria-label={c.audience}>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-5 py-3 sm:px-8">
+          <Button asChild variant="ghost" className="h-auto px-0 hover:bg-transparent"><a href="#top" className="gap-3"><span className="flex size-9 items-center justify-center rounded-full bg-primary font-display text-primary-foreground">GD</span><span className="hidden font-semibold sm:block">Ginelle Doubek</span></a></Button>
+          <div className="hidden items-center gap-6 lg:flex">
+            {['capabilities', 'about', 'direction'].map((id, i) => <Button asChild key={id} variant="link" className="px-0 text-xs text-muted-foreground"><a href={`#${id}`}>{c.nav[i]}</a></Button>)}
+          </div>
+          <div className="flex items-center gap-2">
+            <Globe2 className="size-4 text-muted-foreground" aria-hidden="true" />
+            <div role="group" aria-label={c.language} className="flex gap-0.5">
+              {(Object.keys(languages) as Language[]).map(language => <Button key={language} onClick={() => switchLanguage(language)} variant={language === lang ? 'secondary' : 'ghost'} size="sm" aria-pressed={language === lang} aria-label={languages[language]} title={languages[language]} className="px-2.5 uppercase">{language}</Button>)}
+            </div>
+            <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex"><a href={LINKEDIN} target="_blank" rel="noreferrer" aria-label={c.connect}><Linkedin /></a></Button>
           </div>
         </div>
       </nav>
 
-      <main id="main-content" className="mx-auto max-w-3xl px-5 pb-12 sm:px-8 sm:pb-20">
-        <header id="top" onPointerMove={handleHeroPointer} className="hero-spotlight scroll-mt-20 py-12 sm:py-20">
-          <div className="hero-content">
-            <p className="hero-enter text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Ginelle Doubek · Obersiggenthal, Aargau
-            </p>
-            <h1 className="hero-enter hero-delay-1 mt-5 text-4xl leading-[1.1] text-foreground sm:text-6xl">
-              I turn customer data, processes and relationships into{" "}
-              <em className="text-primary">clear decisions.</em>
-            </h1>
-            <p className="hero-enter hero-delay-2 mt-6 text-lg text-muted-foreground">
-              CRM & business operations · Salesforce admin skills · Data analytics. Open to CRM Specialist,
-              Salesforce Administrator, Sales Ops and CRM/Business Analyst roles — hybrid or remote-friendly,
-              Aargau/Zurich.
-            </p>
-            <div className="hero-enter hero-delay-3 mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={LINKEDIN}
-                target="_blank"
-                rel="noreferrer"
-                className="button-interactive group inline-flex items-center justify-center gap-2 rounded-md cta-primary px-6 py-3.5 font-semibold text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                Connect on LinkedIn
-                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-              </a>
-              <a
-                href={`mailto:${EMAIL}`}
-                className="button-interactive group inline-flex items-center justify-center gap-2 rounded-md border border-border bg-card/60 px-6 py-3.5 font-medium text-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                <Mail className="size-4 transition-transform duration-300 group-hover:-rotate-6" aria-hidden="true" />
-                Email me
-              </a>
+      <main id="main-content">
+        <header id="top" className="portfolio-hero scroll-mt-24 border-b border-border">
+          <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+            <div className="hero-enter flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground"><p>{c.location}</p><p className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-primary" />{c.audience}</p></div>
+            <h1 className="hero-enter hero-delay-1 mt-8 text-5xl leading-tight sm:text-7xl">Ginelle Doubek<span className="text-primary">.</span></h1>
+            <p className="hero-enter hero-delay-1 mt-4 max-w-3xl font-display text-2xl leading-snug sm:text-3xl">{c.headline}</p>
+            <p className="hero-enter hero-delay-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{c.intro}</p>
+            <div className="hero-enter hero-delay-3 mt-7 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" className="button-interactive cta-primary h-auto whitespace-normal py-3.5"><a href={LINKEDIN} target="_blank" rel="noreferrer">{c.connect}<ArrowUpRight /></a></Button>
+              <Button asChild variant="outline" size="lg" className="h-auto py-3.5"><a href={`mailto:${EMAIL}`}><Mail />{c.email}</a></Button>
             </div>
+            <p className="mt-5 max-w-2xl text-xs leading-relaxed text-muted-foreground">{c.availability}</p>
+            <div className="mt-10 flex items-center gap-3 text-xs text-primary"><ArrowDown className="size-4" /><span>{c.proofTitle}</span></div>
           </div>
         </header>
 
-        <Reveal>
-          <section aria-labelledby="experience-heading">
-            <div className="mb-5 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-              <h2 id="experience-heading" className="text-2xl text-foreground">Experience at a glance</h2>
-              <p className="text-sm text-muted-foreground">Select a card to explore</p>
+        <section className="border-b border-border bg-card" aria-label={c.proofTitle}>
+          <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8">
+            <div className="grid gap-3 sm:grid-cols-3">
+              {c.proof.map(([years, label], i) => <Button key={i} variant="ghost" onClick={() => setActiveProof(i)} aria-pressed={activeProof === i} aria-controls="proof-detail" className={`proof-card h-auto min-h-28 flex-col items-start gap-3 whitespace-normal rounded-lg border p-5 text-left ${activeProof === i ? 'is-selected' : ''}`}><span className="font-display text-3xl text-primary">{years}</span><span className="text-sm">{label}</span></Button>)}
             </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {proof.map((item, index) => {
-                const Icon = item.icon;
-                const selected = activeProof === index;
-                return (
-                  <button
-                    key={item.label}
-                    type="button"
-                    aria-pressed={selected}
-                    aria-controls="proof-detail"
-                    onClick={() => setActiveProof(index)}
-                    className={`proof-card group rounded-lg border p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${selected ? "is-selected" : ""}`}
-                  >
-                    <span className="flex items-start justify-between gap-3">
-                      <span className="font-display text-3xl text-primary">{item.years}</span>
-                      <span className="proof-icon flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
-                        <Icon className="size-4" aria-hidden="true" />
-                      </span>
-                    </span>
-                    <span className="mt-3 block font-semibold leading-snug text-card-foreground">{item.label}</span>
-                    <span className="mt-4 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary">
-                      {selected ? "Selected" : "Explore"}
-                      <ChevronRight className={`size-3.5 transition-transform duration-300 ${selected ? "rotate-90" : "group-hover:translate-x-1"}`} aria-hidden="true" />
-                    </span>
-                  </button>
-                );
+            <p id="proof-detail" aria-live="polite" className="mt-5 min-h-12 text-sm leading-relaxed text-muted-foreground">{selectedProof?.[2]}</p>
+          </div>
+        </section>
+
+        <section id="capabilities" className="scroll-mt-24" aria-labelledby="capability-title">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
+            <p className="section-kicker">{c.capabilityKicker}</p><h2 id="capability-title" className="mt-3 max-w-2xl text-3xl leading-tight sm:text-4xl">{c.capabilityTitle}</h2>
+            <div className="mt-9 grid gap-7 md:grid-cols-3">
+              {c.capabilities.map(([title, text], i) => {
+                const Icon = capabilityIcons[i] ?? Database;
+                return <div key={i} className="border-t border-border pt-5"><Icon className="size-6 text-primary" aria-hidden="true" /><h3 className="mt-4 font-sans text-lg font-semibold">{title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{text}</p></div>;
               })}
             </div>
-            <div id="proof-detail" key={selectedProof.label} className="proof-detail mt-4 rounded-lg border border-primary/25 bg-secondary/60 p-5 sm:p-6" aria-live="polite">
-              <p className="text-xs font-semibold uppercase tracking-widest text-primary">In practice</p>
-              <p className="mt-2 leading-relaxed text-secondary-foreground">{selectedProof.detail}</p>
-            </div>
-          </section>
-        </Reveal>
+          </div>
+        </section>
 
-        <Reveal delay={60}>
-          <section id="crm-demo" className="scroll-mt-24 pt-16" aria-labelledby="crm-demo-heading">
-            <p className="section-kicker">Interactive demo · Sample data</p>
-            <h2 id="crm-demo-heading" className="mt-2 text-2xl text-foreground">Try a mini CRM pipeline</h2>
-            <p className="mb-5 mt-3 leading-relaxed text-muted-foreground">
-              Explore a fictional workflow: choose an account, move it to the next stage, then reset the demo.
-            </p>
-            <CrmDemo />
-          </section>
-        </Reveal>
+        <section id="crm-demo" className="scroll-mt-24 border-y border-border bg-secondary/35" aria-labelledby="demo-title">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-16">
+            <p className="section-kicker">{c.demoKicker}</p><h2 id="demo-title" className="mt-3 text-3xl sm:text-4xl">{c.demoTitle}</h2><p className="mb-7 mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">{c.demoIntro}</p>
+            <CrmDemo lang={lang} />
+          </div>
+        </section>
 
-        <Reveal delay={80}>
-          <section id="about" className="scroll-mt-24 pt-16">
-            <p className="section-kicker">My story</p>
-            <h2 className="mt-2 text-2xl text-foreground">About</h2>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
-              At ClavigerME I led business development and acquisitions, taking new B2B hotel accounts from
-              prospecting to signed partnership, and ran Salesforce to keep the MENA pipeline current. I later
-              coordinated the abstract programme for EULAR's international congress, working with researchers,
-              committees and cross-border teams. After a planned career break, I'm re-entering the Swiss job
-              market with fresh skills in data, cloud and AI.
-            </p>
-          </section>
-        </Reveal>
+        <section id="about" className="scroll-mt-24" aria-labelledby="story-title">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
+            <p className="section-kicker">{c.storyKicker}</p><h2 id="story-title" className="mt-3 max-w-2xl text-3xl leading-tight sm:text-4xl">{c.storyTitle}</h2>
+            <div className="mt-10 max-w-3xl">
+              {c.story.map(([title, text], i) => <div key={i} className="relative flex gap-5 pb-9 last:pb-0"><div className="relative flex w-8 shrink-0 justify-center"><span className="relative z-10 flex size-8 items-center justify-center rounded-full border border-primary/30 bg-background text-xs font-semibold text-primary">0{i + 1}</span>{i < 2 && <span className="absolute bottom-0 top-8 w-px bg-border" />}</div><div><h3 className="font-sans text-lg font-semibold">{title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{text}</p></div></div>)}
+            </div>
+          </div>
+        </section>
 
-        <Reveal delay={100}>
-          <section className="mt-12 grid gap-10 sm:grid-cols-2">
-            <div id="toolkit" className="scroll-mt-24">
-              <p className="section-kicker">What I work with</p>
-              <h2 className="mt-2 text-2xl text-foreground">Toolkit</h2>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {toolkit.map((item) => (
-                  <li key={item} className="toolkit-pill rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-sm text-muted-foreground">English (full professional) · German (professional working)</p>
+        <section id="direction" className="scroll-mt-24 border-y border-border bg-secondary/40" aria-labelledby="direction-title">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-16">
+            <p className="section-kicker">{c.directionKicker}</p><h2 id="direction-title" className="mt-3 text-3xl leading-tight sm:text-4xl">{c.directionTitle}</h2><p className="mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground">{c.directionText}</p>
+            <div className="mt-10 grid gap-10 md:grid-cols-2">
+              <div id="toolkit"><h3 className="font-sans text-base font-semibold">{c.skillsTitle}</h3><ul className="mt-4 flex flex-wrap gap-2">{toolkit.map(item => <li key={item} className="toolkit-pill rounded-full border border-border bg-card px-3 py-1.5 text-xs">{item === 'AI prompting' && lang !== 'en' ? ({ de: 'KI-Prompting', fr: 'Prompting IA', it: 'Prompting IA' }[lang]) : item}</li>)}</ul><p className="mt-5 text-xs leading-relaxed text-muted-foreground">{c.spoken}</p></div>
+              <div id="learning"><h3 className="font-sans text-base font-semibold">{c.learningTitle}</h3><ul className="mt-4 space-y-3">{c.learning.map(item => <li key={item} className="border-l-2 border-accent pl-3 text-sm leading-relaxed text-muted-foreground">{item}</li>)}</ul></div>
             </div>
-            <div id="learning" className="scroll-mt-24">
-              <p className="section-kicker">Always growing</p>
-              <h2 className="mt-2 text-2xl text-foreground">Recent learning</h2>
-              <ul className="mt-4 space-y-2 text-muted-foreground">
-                {learning.map((item) => (
-                  <li key={item} className="learning-item border-l-2 border-accent pl-3 text-sm">{item}</li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        </Reveal>
+          </div>
+        </section>
 
-        <Reveal delay={100}>
-          <footer className="mt-20 border-t border-border pt-8 text-sm text-muted-foreground">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <a href={`mailto:${EMAIL}`} className="underline-offset-4 transition-colors hover:text-primary hover:underline">{EMAIL}</a>
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-card-foreground transition duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                aria-live="polite"
-              >
-                {copyState === "copied" ? <Check className="size-3.5 text-primary" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
-                {copyState === "copied" ? "Email copied" : copyState === "error" ? "Copy unavailable" : "Copy email"}
-              </button>
-            </div>
-          </footer>
-        </Reveal>
+        <section aria-labelledby="personal-title" className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
+          <div className="grid items-center gap-8 md:grid-cols-[1fr_240px]">
+            <div><p className="section-kicker">{c.personalKicker}</p><h2 id="personal-title" className="mt-3 max-w-2xl text-3xl leading-tight sm:text-4xl">{c.personalTitle}</h2><p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">{c.personalText}</p><div className="mt-5 flex flex-wrap gap-5 text-sm font-medium text-primary"><span>{c.tennis}</span><span className="text-accent" aria-hidden="true">/</span><span>{c.skiing}</span></div></div>
+            <svg viewBox="0 0 240 240" className="mx-auto w-48 text-primary md:w-60" fill="none" aria-hidden="true">
+              <circle cx="120" cy="120" r="112" className="fill-secondary" />
+              <g transform="rotate(-28 108 105)" stroke="currentColor" strokeWidth="3"><ellipse cx="108" cy="85" rx="32" ry="43" /><ellipse cx="108" cy="85" rx="27" ry="38" strokeWidth="1" /><path d="M88 58v54m10-64v74m10-75v76m10-75v74m10-62v51M83 65h50M80 75h56M80 85h56M82 95h53M86 105h43M92 115h32" strokeWidth="0.8" /><path d="m98 126 4 22h12l4-22M103 148v41q5 7 10 0v-41" /></g>
+              <circle cx="161" cy="142" r="16" className="fill-accent" stroke="currentColor" strokeWidth="2" /><path d="M150 130q18 10 22 23m-23 1q9-5 12-27" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m146 187 45-100m-32 111 43-97" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+            </svg>
+          </div>
+        </section>
+
+        <footer className="border-t border-border bg-card">
+          <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8"><h2 className="text-3xl">{c.contactTitle}</h2><p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">{c.contactText}</p><div className="mt-6 flex flex-col gap-3 sm:flex-row"><Button asChild className="cta-primary h-auto whitespace-normal py-3"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin />{c.connect}<ArrowUpRight /></a></Button><Button asChild variant="outline" className="h-auto py-3"><a href={`mailto:${EMAIL}`}><Mail />{c.email}</a></Button></div><div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6"><a href={`mailto:${EMAIL}`} className="break-all text-sm text-muted-foreground hover:text-primary">{EMAIL}</a><Button variant="ghost" size="sm" onClick={copyEmail} aria-live="polite">{copyState === 'copied' ? <Check /> : <Copy />}{copyState === 'copied' ? c.copied : copyState === 'error' ? c.copyError : c.copy}</Button></div></div>
+        </footer>
       </main>
-
-      <button
-        type="button"
-        onClick={backToTop}
-        aria-label="Back to top"
-        tabIndex={showBackToTop ? 0 : -1}
-        className={`back-to-top fixed bottom-5 right-5 z-40 flex size-11 items-center justify-center rounded-full cta-primary text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${showBackToTop ? "is-visible" : ""}`}
-      >
-        <ArrowUp className="size-4" aria-hidden="true" />
-      </button>
+      {showTop && <Button size="icon" aria-label={c.top} title={c.top} className="fixed bottom-5 right-5 z-40 rounded-full" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp /></Button>}
     </>
   );
 }
