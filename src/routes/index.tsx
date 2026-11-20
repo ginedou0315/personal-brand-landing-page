@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Check, Copy, Datab
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CrmDemo } from '@/components/CrmDemo';
+import portraitAsset from '@/assets/ginelle-portrait.png.asset.json';
 import { languageSearch, languages, portfolioCopy, type Language } from '@/lib/portfolio-copy';
 
 const EMAIL = 'ginelle.doubek@gmail.com';
@@ -64,12 +65,19 @@ function Index() {
         <header id="top" className="brand-hero scroll-mt-24 border-b border-border">
           <div className="page-width py-10 sm:py-14">
             <div className="hero-enter flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground"><p>{c.location}</p><p className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-primary" />CRM / DATA / AI</p></div>
-            <p className="hero-enter mt-9 max-w-2xl text-xs font-semibold text-primary sm:mt-12">{c.role}</p>
-            <h1 className="hero-enter hero-delay-1 mt-3 text-5xl leading-tight sm:text-7xl lg:text-8xl">Ginelle Doubek<span className="text-primary">.</span></h1>
-            <p className="hero-enter hero-delay-1 mt-4 max-w-3xl font-display text-2xl leading-snug sm:text-4xl">{c.headline}</p>
-            <p className="hero-enter hero-delay-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
-            <div className="hero-enter hero-delay-3 mt-7 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="button-interactive h-auto whitespace-normal py-3.5"><a href={LINKEDIN} target="_blank" rel="noreferrer">{c.connect}<ArrowUpRight /></a></Button><Button asChild variant="outline" size="lg" className="h-auto whitespace-normal py-3.5"><a href="#tindaflow">TindaFlow<ArrowDown /></a></Button></div>
-            <p className="mt-6 max-w-2xl text-xs leading-relaxed text-muted-foreground">{c.availability}</p>
+            <div className="mt-9 grid items-center gap-9 sm:mt-12 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_22rem]">
+              <div className="min-w-0">
+                <p className="hero-enter max-w-2xl text-xs font-semibold text-primary">{c.role}</p>
+                <h1 className="hero-enter hero-delay-1 mt-3 text-5xl leading-tight sm:text-7xl lg:text-6xl xl:text-8xl">Ginelle Doubek<span className="text-primary">.</span></h1>
+                <p className="hero-enter hero-delay-1 mt-4 max-w-3xl font-display text-2xl leading-snug sm:text-4xl">{c.headline}</p>
+                <p className="hero-enter hero-delay-2 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
+                <div className="hero-enter hero-delay-3 mt-7 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="button-interactive h-auto whitespace-normal py-3.5"><a href={LINKEDIN} target="_blank" rel="noreferrer">{c.connect}<ArrowUpRight /></a></Button><Button asChild variant="outline" size="lg" className="h-auto whitespace-normal py-3.5"><a href="#tindaflow">TindaFlow<ArrowDown /></a></Button></div>
+                <p className="mt-6 max-w-2xl text-xs leading-relaxed text-muted-foreground">{c.availability}</p>
+              </div>
+              <div className="hero-enter hero-delay-2 portrait-frame">
+                <img src={portraitAsset.url} alt="Ginelle Doubek" width="1528" height="1920" className="portrait-image" fetchPriority="high" decoding="async" />
+              </div>
+            </div>
           </div>
           <div className="border-t border-border"><div className="page-width grid gap-0 sm:grid-cols-3">{c.proof.map(([years, label], i) => <Button key={i} variant="ghost" onClick={() => setActiveProof(i)} aria-pressed={activeProof === i} aria-controls="proof-detail" className={`experience-cell h-auto min-h-24 items-center justify-start gap-4 whitespace-normal rounded-none border-b border-border py-5 text-left sm:border-b-0 ${activeProof === i ? 'is-selected' : ''}`}><span className="shrink-0 font-display text-2xl text-primary">{years}</span><span className="max-w-40 text-xs leading-relaxed">{label}</span></Button>)}</div></div>
         </header>

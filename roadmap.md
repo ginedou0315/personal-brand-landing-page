@@ -11,3 +11,5 @@
 - [x] Add Ginelle's career story and personal sports note.
 - [x] Provide complete English, German, French and Italian versions, including the CRM demo.
 - [x] Verify language selection and CRM interactions on desktop and mobile.
+- [x] Add Ginelle's supplied portrait to the introduction and verify it on desktop and mobile.
+- [ ] Add tennis and skiing photos or videos when Ginelle uploads the media.
