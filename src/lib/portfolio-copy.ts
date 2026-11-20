@@ -536,7 +536,7 @@ const previousCopy = {
 // Candidate positioning and project scope come from the supplied personal brand plan.
 export const brandCopy = {
   en: {
-    nav: ["Expertise", "TindaFlow", "My story", "Let’s connect"],
+    nav: ["Expertise", "TindaCo", "My story", "Let’s connect"],
     role: "Corporate Business & CRM · Data Analytics · AI & Automation",
     headline: "Business experience. A technology mindset.",
     intro:
@@ -570,7 +570,7 @@ export const brandCopy = {
       "Collaboration",
     ],
     projectKicker: "Putting learning into practice",
-    projectTitle: "TindaFlow",
+    projectTitle: "TindaCo",
     projectTagline: "Your Business. Beautifully Managed.",
     prototype: "Prototype in development",
     projectIntro:
@@ -601,7 +601,7 @@ export const brandCopy = {
       ],
       [
         "From business challenges to building",
-        "Today, I am connecting my corporate experience with CRM, Salesforce, AI and automation. Developing TindaFlow lets me apply new skills to challenges I understand as an entrepreneur.",
+        "Today, I am connecting my corporate experience with CRM, Salesforce, AI and automation. Developing TindaCo lets me apply new skills to challenges I understand as an entrepreneur.",
       ],
     ],
     directionKicker: "My next chapter",
@@ -627,7 +627,7 @@ export const brandCopy = {
       "A fictional CRM example reflecting my interest in organized customer relationships and practical workflows.",
   },
   de: {
-    nav: ["Kompetenzen", "TindaFlow", "Mein Weg", "Kontakt"],
+    nav: ["Kompetenzen", "TindaCo", "Mein Weg", "Kontakt"],
     role: "Corporate Business & CRM · Datenanalyse · KI & Automatisierung",
     headline: "Geschäftserfahrung. Technologisches Denken.",
     intro:
@@ -661,7 +661,7 @@ export const brandCopy = {
       "Zusammenarbeit",
     ],
     projectKicker: "Lernen in die Praxis umsetzen",
-    projectTitle: "TindaFlow",
+    projectTitle: "TindaCo",
     projectTagline: "Ihr Geschäft. Einfach gut organisiert.",
     prototype: "Prototyp in Entwicklung",
     projectIntro:
@@ -692,7 +692,7 @@ export const brandCopy = {
       ],
       [
         "Von Herausforderungen zum Entwickeln",
-        "Heute verbinde ich meine Geschäftserfahrung mit CRM, Salesforce, KI und Automatisierung. Mit TindaFlow wende ich neue Fähigkeiten auf Herausforderungen an, die ich als Unternehmerin kenne.",
+        "Heute verbinde ich meine Geschäftserfahrung mit CRM, Salesforce, KI und Automatisierung. Mit TindaCo wende ich neue Fähigkeiten auf Herausforderungen an, die ich als Unternehmerin kenne.",
       ],
     ],
     directionKicker: "Mein nächstes Kapitel",
@@ -727,7 +727,7 @@ export const brandCopy = {
       "Ein fiktives CRM-Beispiel für strukturierte Kundenbeziehungen und praktische Abläufe.",
   },
   fr: {
-    nav: ["Compétences", "TindaFlow", "Mon parcours", "Contact"],
+    nav: ["Compétences", "TindaCo", "Mon parcours", "Contact"],
     role: "Business & CRM · Analyse de données · IA & automatisation",
     headline: "L’expérience métier. Un esprit technologique.",
     intro:
@@ -762,7 +762,7 @@ export const brandCopy = {
       "Collaboration",
     ],
     projectKicker: "Mettre l’apprentissage en pratique",
-    projectTitle: "TindaFlow",
+    projectTitle: "TindaCo",
     projectTagline: "Votre activité. Tout simplement bien gérée.",
     prototype: "Prototype en développement",
     projectIntro:
@@ -793,7 +793,7 @@ export const brandCopy = {
       ],
       [
         "Des défis métier à la création",
-        "Aujourd’hui, je relie mon expérience métier au CRM, à Salesforce, à l’IA et à l’automatisation. TindaFlow me permet d’appliquer mes nouvelles compétences à des défis que je connais en tant qu’entrepreneuse.",
+        "Aujourd’hui, je relie mon expérience métier au CRM, à Salesforce, à l’IA et à l’automatisation. TindaCo me permet d’appliquer mes nouvelles compétences à des défis que je connais en tant qu’entrepreneuse.",
       ],
     ],
     directionKicker: "Mon prochain chapitre",
@@ -822,7 +822,7 @@ export const brandCopy = {
       "Un exemple CRM fictif qui reflète mon intérêt pour des relations clients structurées et des processus concrets.",
   },
   it: {
-    nav: ["Competenze", "TindaFlow", "La mia storia", "Contatti"],
+    nav: ["Competenze", "TindaCo", "La mia storia", "Contatti"],
     role: "Business & CRM · Analisi dei dati · IA & automazione",
     headline: "Esperienza aziendale. Mentalità tecnologica.",
     intro:
@@ -857,7 +857,7 @@ export const brandCopy = {
       "Collaborazione",
     ],
     projectKicker: "Mettere in pratica ciò che imparo",
-    projectTitle: "TindaFlow",
+    projectTitle: "TindaCo",
     projectTagline: "Il tuo business. Gestito al meglio.",
     prototype: "Prototipo in sviluppo",
     projectIntro:
@@ -888,7 +888,7 @@ export const brandCopy = {
       ],
       [
         "Dalle sfide aziendali alla creazione",
-        "Oggi collego la mia esperienza aziendale a CRM, Salesforce, IA e automazione. TindaFlow mi permette di applicare nuove competenze a sfide che conosco come imprenditrice.",
+        "Oggi collego la mia esperienza aziendale a CRM, Salesforce, IA e automazione. TindaCo mi permette di applicare nuove competenze a sfide che conosco come imprenditrice.",
       ],
     ],
     directionKicker: "Il mio prossimo capitolo",

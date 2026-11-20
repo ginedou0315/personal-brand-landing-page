@@ -29,6 +29,7 @@ import { ProjectGrid } from "@/components/ProjectGrid";
 import { Certifications } from "@/components/Certifications";
 import { GinnyChat } from "@/components/GinnyChat";
 import portraitAsset from "@/assets/ginelle-portrait.png.asset.json";
+import tindacoAsset from "@/assets/tindaco-logo.png.asset.json";
 import cvAsset from "@/assets/Ginelle_Doubek_Website_CV.pdf.asset.json";
 import {
   GITHUB,
@@ -194,8 +195,8 @@ function Index() {
                     size="lg"
                     className="h-auto whitespace-normal py-3.5"
                   >
-                    <a href="#tindaflow">
-                      TindaFlow
+                    <a href="#tindaco">
+                      {c.projectTitle}
                       <ArrowDown />
                     </a>
                   </Button>
@@ -278,7 +279,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="tindaflow" className="scroll-mt-24 border-y border-border bg-secondary/45">
+        <section id="tindaco" className="scroll-mt-24 border-y border-border bg-secondary/45">
           <div className="page-width section-space">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <p className="section-kicker">02 / {c.projectKicker}</p>
@@ -289,6 +290,15 @@ function Index() {
             </div>
             <div className="mt-7 grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr]">
               <div>
+                <img
+                  src={tindacoAsset.url}
+                  alt="TindaCo"
+                  width="1310"
+                  height="460"
+                  className="mb-6 h-auto w-full max-w-[19rem] sm:max-w-[22rem]"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <h2 className="text-5xl sm:text-6xl">
                   {c.projectTitle}
                   <span className="text-primary">.</span>
