@@ -1,5 +1,11 @@
 export const languages = { en: "English", de: "Deutsch", fr: "Français", it: "Italiano" } as const;
 export type Language = keyof typeof languages;
+export const personalVideoCopy = {
+  en: { running: "Running with baby Daniela", note: "These days, my new favourite activity is going for a run with my baby Daniela. 💜" },
+  de: { running: "Laufen mit Baby Daniela", note: "Am liebsten gehe ich inzwischen mit meinem Baby Daniela laufen." },
+  fr: { running: "Courir avec mon bébé Daniela", note: "Mon nouveau plaisir préféré : courir avec mon bébé Daniela." },
+  it: { running: "Correre con la mia bimba Daniela", note: "La mia nuova attività preferita è correre con la mia bimba Daniela." },
+} as const;
 export function isLanguage(value: unknown): value is Language {
   return typeof value === "string" && Object.prototype.hasOwnProperty.call(languages, value);
 }
@@ -95,7 +101,7 @@ const previousCopy = {
     personalKicker: "On a personal note",
     personalTitle: "A love of sport, from childhood to Switzerland.",
     personalText:
-      "Sport has always been part of my life. I used to compete, and tennis has stayed with me from childhood to today. After moving to Switzerland, I learned cross-country skiing — and came to love it, too.",
+      "Sport has always been part of my life. I used to compete, and tennis has been a constant since childhood. After moving to Switzerland, I discovered cross-country skiing and grew to love it too.",
     tennis: "Tennis",
     skiing: "Cross-country skiing",
     contactTitle: "Let’s talk about the next chapter.",
