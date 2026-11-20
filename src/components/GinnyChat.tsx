@@ -28,8 +28,14 @@ export function GinnyChat({ lang }: { lang: Language }) {
   const [initial, setInitial] = useState<UIMessage[] | null>(null);
   useEffect(() => {
     try {
-      const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]") as UIMessage[];
-      setInitial(Array.isArray(saved) ? saved : []);
+      const saved: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]");
+      const valid = Array.isArray(saved) ? saved.filter((item): item is UIMessage =>
+        item != null && typeof item === "object" && typeof item.id === "string" &&
+        (item.role === "user" || item.role === "assistant") && Array.isArray(item.parts) &&
+        item.parts.every((part: unknown) => part != null && typeof part === "object" &&
+          "type" in part && part.type === "text" && "text" in part && typeof part.text === "string"),
+      ).slice(-30) : [];
+      setInitial(valid);
     } catch {
       setInitial([]);
     }
@@ -37,7 +43,7 @@ export function GinnyChat({ lang }: { lang: Language }) {
   if (!initial)
     return (
       <div className="flex min-h-64 items-center justify-center">
-        <Shimmer>Ginny’s AI</Shimmer>
+        <Shimmer>Ginny’s portfolio guide</Shimmer>
       </div>
     );
   return <GinnyConversation lang={lang} initialMessages={initial} />;
@@ -84,7 +90,11 @@ function GinnyConversation({
       .map((m) => ({ ...m, parts: m.parts.filter((p) => p.type === "text") }))
       .filter((m) => m.parts.length > 0)
       .slice(-30);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    } catch {
+      // Keep the conversation usable when browser storage is disabled or full.
+    }
   }, [messages, busy]);
 
   useEffect(() => {
@@ -99,7 +109,11 @@ function GinnyConversation({
     if (!question || busy) return;
     setActionError("");
     setInput("");
-    await sendMessage({ text: question }, { body: { language: lang } });
+    try {
+      await sendMessage({ text: question }, { body: { language: lang } });
+    } catch (error) {
+      setActionError(friendlyError(error instanceof Error ? error : new Error(c.loadError)));
+    }
     requestAnimationFrame(() => textareaRef.current?.focus());
   }
 
@@ -109,7 +123,11 @@ function GinnyConversation({
 
   function clearConversation() {
     if (!window.confirm(c.clearConfirm)) return;
-    window.localStorage.removeItem(STORAGE_KEY);
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Clearing the visible conversation does not require browser storage.
+    }
     setMessages([]);
     setActionError("");
     textareaRef.current?.focus();
@@ -125,7 +143,7 @@ function GinnyConversation({
             className="size-9 rounded-full border border-border bg-secondary object-cover object-top"
           />
           <div>
-            <p className="text-sm font-semibold">Ginny’s AI</p>
+            <p className="text-sm font-semibold">Ginny’s portfolio guide</p>
             <p className="text-[11px] text-muted-foreground">{c.cloudSaved}</p>
           </div>
         </div>
