@@ -31,3 +31,4 @@ use the editor.
 
 - Keep the single-page portfolio translations in a shared browser-safe copy module and select language through a validated URL search parameter so shared links, metadata and the CRM demo stay aligned.
 - Keep demo account state language-neutral and translate it only when rendering so switching languages never resets pipeline progress.
+- Keep brand-plan content in the shared translation module and render project scope as an unframed diagram rather than an invented product screenshot, so prototype claims stay distinct from the interactive CRM example.

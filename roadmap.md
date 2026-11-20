@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Rebuild the portfolio around the supplied personal brand plan in all four languages.
+- [x] Feature TindaFlow accurately as a prototype and include hiring, collaboration and workplace values.
+- [x] Verify language choices, contact links, CRM interactions and mobile layout.
+
 - [x] Add polished page motion, clickable proof cards, and copy-email feedback.
 - [x] Build a clickable mini CRM demo with clearly labeled fictional sample data.
 - [x] Verify the full page and CRM interactions on desktop and mobile.
