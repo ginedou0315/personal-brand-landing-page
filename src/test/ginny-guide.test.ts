@@ -13,6 +13,11 @@ describe("Prepared portfolio answers", () => {
   it.each(["en", "de", "fr", "it"] as Language[])("uses the published sports story in %s", (language) => {
     expect(getPortfolioGuideAnswer("tennis", language)).toContain(portfolioCopy[language].personalText);
   });
+  it("formats language names and proficiency levels clearly", () => {
+    const answer = getPortfolioGuideAnswer("Which languages does she speak?", "en");
+    expect(answer).toContain("English — C1");
+    expect(answer).toContain("German — B2");
+  });
   it("does not invent a Salesforce certification", () => {
     expect(getPortfolioGuideAnswer("Is she Salesforce certified?", "en")).toContain("does not list a completed");
   });

@@ -55,7 +55,7 @@ export function getPortfolioGuideAnswer(question: string, language: Language, pr
     case "certifications": return `${list(certifications.map((item) => `[${item.title}](${item.url}) — ${item.issuer}`))}\n\n${words.more}`;
     case "skills": return `${list(copy.capabilities.map(([title, description]) => `**${title}** — ${description}`))}\n\n${technicalSkills.join(" · ")}`;
     case "direction": return `${copy.availability}\n\n${copy.directionText}\n\n${words.contact}`;
-    case "languages": return `${list(copy.languageList)}\n\n${words.contact}`;
+    case "languages": return `${list(copy.languageList.map(([level, name]) => `${name} — ${level}`))}\n\n${words.contact}`;
     case "sports": return `${copy.personalText}\n\n${copy.hobbies.join(" · ")}`;
     case "values": return `${copy.purpose}\n\n${list(copy.values.map(([title, description]) => `**${title}** — ${description}`))}`;
     case "contact": return words.contact;
