@@ -1,9 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, createIdGenerator, type UIMessage } from "ai";
-import { authenticateGinnyRequest } from "@/lib/ai/ginny-auth.server";
 import { buildGinnyInstructions } from "@/lib/ai/ginny-knowledge.server";
 import { createResponsesCall } from "@/lib/ai/responses.server";
-import type { Json } from "@/integrations/supabase/types";
 import { languageSearch } from "@/lib/portfolio-copy";
 
 const MAX_MESSAGES = 40;
@@ -67,9 +65,6 @@ export const Route = createFileRoute("/api/ginny-chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const auth = await authenticateGinnyRequest(request);
-        if (!auth.ok) return auth.response;
-
         const body = (await request.json().catch(() => null)) as {
           messages?: unknown;
           language?: unknown;
@@ -82,24 +77,6 @@ export const Route = createFileRoute("/api/ginny-chat")({
             { status: 400 },
           );
         }
-        const latestUserMessage = messages.at(-1)!;
-        const userRow = {
-          user_id: auth.userId,
-          message_id: latestUserMessage.id,
-          role: "user" as const,
-          parts: latestUserMessage.parts as unknown as Json,
-        };
-        const { error: userSaveError } = await auth.supabase
-          .from("ginny_messages")
-          .upsert(userRow, { onConflict: "user_id,message_id" });
-        if (userSaveError) {
-          console.error("Could not save Ginny user message:", userSaveError.message);
-          return Response.json(
-            { error: "Your message could not be saved. Please try again." },
-            { status: 500 },
-          );
-        }
-
         const apiKey = process.env["LOVABLE_API_KEY"];
         if (!apiKey) {
           console.error("Ginny chat is missing its AI key.");
@@ -119,23 +96,6 @@ export const Route = createFileRoute("/api/ginny-chat")({
           generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
           sendReasoning: true,
           onError: safeStreamError,
-          onFinish: async ({ responseMessage }) => {
-            const parts = textParts(responseMessage);
-            if (parts.length === 0) return;
-            const { error } = await auth.supabase.from("ginny_messages").upsert(
-              {
-                user_id: auth.userId,
-                message_id: responseMessage.id,
-                role: "assistant",
-                parts: parts as unknown as Json,
-              },
-              { onConflict: "user_id,message_id" },
-            );
-            if (error) {
-              console.error("Could not save Ginny assistant message:", error.message);
-              throw new Error("The answer could not be saved.");
-            }
-          },
         });
         return wrapResponse(response);
       },

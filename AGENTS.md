@@ -32,6 +32,6 @@ use the editor.
 - Keep the portfolio translations in a shared browser-safe copy module and select language through a validated URL search parameter so shared links, metadata and the CRM demo stay aligned.
 - Keep demo account state language-neutral and translate it only when rendering so switching languages never resets pipeline progress.
 - Keep brand-plan content in the shared translation module and render project scope as an unframed diagram rather than an invented product screenshot, so prototype claims stay distinct from the interactive CRM example.
-- Keep Ginny's AI as one user-owned cloud conversation through the server-only Responses endpoint and persist text-only UI message parts, so accounts stay isolated and saved history remains compatible with follow-up requests.
+- Keep Ginny's AI open to visitors without sign-in: the server-only Responses endpoint is stateless and the conversation (text parts only) is kept in the visitor's browser, so no visitor data is stored on the backend.
 
 - The portfolio is multi-page (/, /resume, /projects, /about, /contact) sharing SiteShell and sections from PortfolioSections; every internal link carries the lang search param so language persists across pages.

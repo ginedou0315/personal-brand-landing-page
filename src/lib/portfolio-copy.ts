@@ -1514,8 +1514,8 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "A portfolio guide for hiring teams and collaborators, grounded in the verified information on this site.",
     privacy:
-      "Sign in to ask questions. Your single conversation is saved privately and is visible only to you.",
-    cloudSaved: "Private conversation · saved in your account",
+      "Ask anything right away — no sign-in needed. Your conversation stays only in this browser.",
+    cloudSaved: "Ask me anything · no sign-in needed",
     signInTitle: "Start your conversation",
     signInText: "Choose a sign-in method. Email confirmation is required for new email accounts.",
     email: "Email address",
@@ -1546,7 +1546,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     stop: "Stop answer",
     signOut: "Sign out",
     clear: "Clear conversation",
-    clearConfirm: "Delete your saved conversation? This cannot be undone.",
+    clearConfirm: "Clear this conversation?",
     loadError: "Your conversation could not be loaded. Please try again.",
     retry: "Try again",
     disclaimer:
@@ -1569,8 +1569,8 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Ein Portfolio-Guide für Hiring-Teams und Kooperationspartner, basierend auf den geprüften Angaben dieser Website.",
     privacy:
-      "Melde dich an, um Fragen zu stellen. Dein einziges Gespräch wird privat gespeichert und ist nur für dich sichtbar.",
-    cloudSaved: "Privates Gespräch · in deinem Konto gespeichert",
+      "Frag direkt los – ohne Anmeldung. Dein Gespräch bleibt nur in diesem Browser.",
+    cloudSaved: "Frag mich alles · ohne Anmeldung",
     signInTitle: "Gespräch starten",
     signInText: "Wähle eine Anmeldemethode. Neue E-Mail-Konten müssen per E-Mail bestätigt werden.",
     email: "E-Mail-Adresse",
@@ -1625,8 +1625,8 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Un guide du portfolio pour les équipes de recrutement et les collaborateurs, fondé sur les informations vérifiées de ce site.",
     privacy:
-      "Connectez-vous pour poser vos questions. Votre conversation unique est enregistrée en privé et visible uniquement par vous.",
-    cloudSaved: "Conversation privée · enregistrée dans votre compte",
+      "Posez vos questions tout de suite, sans connexion. Votre conversation reste uniquement dans ce navigateur.",
+    cloudSaved: "Posez-moi vos questions · sans connexion",
     signInTitle: "Commencer la conversation",
     signInText:
       "Choisissez une méthode de connexion. Les nouveaux comptes e-mail doivent être confirmés.",
@@ -1684,8 +1684,8 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Una guida al portfolio per team di recruiting e collaboratori, basata sulle informazioni verificate di questo sito.",
     privacy:
-      "Accedi per fare domande. La tua unica conversazione viene salvata privatamente ed è visibile solo a te.",
-    cloudSaved: "Conversazione privata · salvata nel tuo account",
+      "Fai subito le tue domande, senza accesso. La conversazione resta solo in questo browser.",
+    cloudSaved: "Chiedimi qualsiasi cosa · senza accesso",
     signInTitle: "Inizia la conversazione",
     signInText: "Scegli un metodo di accesso. I nuovi account email richiedono una conferma.",
     email: "Indirizzo email",

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
-import { LogOut, RotateCcw, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import {
   Conversation,
   ConversationContent,
@@ -20,101 +19,28 @@ import {
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
-import { GinnyAuth } from "@/components/GinnyAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { ginnyCopy, type Language } from "@/lib/portfolio-copy";
 import portraitAsset from "@/assets/ginelle-portrait.png.asset.json";
 
+const STORAGE_KEY = "ginny-chat-v1";
+
 export function GinnyChat({ lang }: { lang: Language }) {
-  const c = ginnyCopy[lang];
-  const [user, setUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-  const [history, setHistory] = useState<UIMessage[]>([]);
-  const [historyState, setHistoryState] = useState<"loading" | "ready" | "error">("loading");
-  const [retry, setRetry] = useState(0);
-
+  const [initial, setInitial] = useState<UIMessage[] | null>(null);
   useEffect(() => {
-    let mounted = true;
-    void supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setUser(data.session?.user ?? null);
-      setAuthLoading(false);
-    });
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!mounted) return;
-      setUser(session?.user ?? null);
-      setAuthLoading(false);
-    });
-    return () => {
-      mounted = false;
-      data.subscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!user) {
-      setHistory([]);
-      setHistoryState("ready");
-      return;
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]") as UIMessage[];
+      setInitial(Array.isArray(saved) ? saved : []);
+    } catch {
+      setInitial([]);
     }
-    let cancelled = false;
-    setHistoryState("loading");
-    void supabase
-      .from("ginny_messages")
-      .select("id, message_id, role, parts, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: true })
-      .then(({ data, error }) => {
-        if (cancelled) return;
-        if (error) {
-          setHistoryState("error");
-          return;
-        }
-        const messages = data.flatMap((row) => {
-          if (row.role !== "user" && row.role !== "assistant") return [];
-          return [
-            {
-              id: row.message_id || row.id,
-              role: row.role,
-              parts: row.parts as UIMessage["parts"],
-            } satisfies UIMessage,
-          ];
-        });
-        setHistory(messages);
-        setHistoryState("ready");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user, retry]);
-
-  if (authLoading)
+  }, []);
+  if (!initial)
     return (
       <div className="flex min-h-64 items-center justify-center">
-        <Shimmer>{c.cloudSaved}</Shimmer>
+        <Shimmer>Ginny’s AI</Shimmer>
       </div>
     );
-  if (!user) return <GinnyAuth lang={lang} />;
-  if (historyState === "loading")
-    return (
-      <div className="flex min-h-64 items-center justify-center">
-        <Shimmer>{c.cloudSaved}</Shimmer>
-      </div>
-    );
-  if (historyState === "error")
-    return (
-      <div
-        role="alert"
-        className="mx-auto max-w-md rounded-lg border border-border p-6 text-center"
-      >
-        <p className="text-sm text-muted-foreground">{c.loadError}</p>
-        <Button variant="outline" className="mt-4" onClick={() => setRetry((value) => value + 1)}>
-          <RotateCcw />
-          {c.retry}
-        </Button>
-      </div>
-    );
-  return <GinnyConversation key={user.id} user={user} lang={lang} initialMessages={history} />;
+  return <GinnyConversation lang={lang} initialMessages={initial} />;
 }
 
 function friendlyError(error?: Error) {
@@ -128,11 +54,9 @@ function friendlyError(error?: Error) {
 }
 
 function GinnyConversation({
-  user,
   lang,
   initialMessages,
 }: {
-  user: User;
   lang: Language;
   initialMessages: UIMessage[];
 }) {
@@ -144,20 +68,24 @@ function GinnyConversation({
     () =>
       new DefaultChatTransport({
         api: "/api/ginny-chat",
-        headers: async () => {
-          const { data } = await supabase.auth.getSession();
-          return data.session ? { Authorization: `Bearer ${data.session.access_token}` } : {};
-        },
         body: { language: lang },
       }),
     [lang],
   );
   const { messages, sendMessage, status, stop, error, setMessages } = useChat({
-    id: `ginny-${user.id}`,
+    id: "ginny-visitor",
     messages: initialMessages,
     transport,
   });
   const busy = status === "submitted" || status === "streaming";
+  useEffect(() => {
+    if (busy) return;
+    const saved = messages
+      .map((m) => ({ ...m, parts: m.parts.filter((p) => p.type === "text") }))
+      .filter((m) => m.parts.length > 0)
+      .slice(-30);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+  }, [messages, busy]);
 
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
@@ -179,16 +107,9 @@ function GinnyConversation({
     void ask(message.text);
   }
 
-  async function clearConversation() {
+  function clearConversation() {
     if (!window.confirm(c.clearConfirm)) return;
-    const { error: deleteError } = await supabase
-      .from("ginny_messages")
-      .delete()
-      .eq("user_id", user.id);
-    if (deleteError) {
-      setActionError(deleteError.message);
-      return;
-    }
+    window.localStorage.removeItem(STORAGE_KEY);
     setMessages([]);
     setActionError("");
     textareaRef.current?.focus();
@@ -217,10 +138,6 @@ function GinnyConversation({
           >
             <Trash2 />
             {c.clear}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => void supabase.auth.signOut()}>
-            <LogOut />
-            {c.signOut}
           </Button>
         </div>
       </div>
