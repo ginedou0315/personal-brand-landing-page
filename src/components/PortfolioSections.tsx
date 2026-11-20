@@ -1,3 +1,4 @@
+import { personalVideoCopy } from "@/lib/portfolio-copy";
 import { portraitAsset, tindacoAsset, cvAsset } from "@/lib/site-assets";
 import { Link } from "@tanstack/react-router";
 import {
@@ -417,60 +418,57 @@ export function DirectionSection({ lang }: { lang: Language }) {
 
 export function PersonalSection({ lang }: { lang: Language }) {
   const c = portfolioCopy[lang];
+  const personal = personalVideoCopy[lang];
+  const videos = [
+    { file: "tennis", label: c.tennis },
+    { file: "cross-country-skiing", label: c.skiing },
+    { file: "running-with-daniela", label: personal.running },
+  ];
   return (
-    <>
-        <section className="border-t border-border">
-          <div className="page-width section-space grid items-center gap-8 md:grid-cols-[1fr_170px]">
-            <div>
-              <p className="section-kicker">{c.personalKicker}</p>
-              <h2 className="mt-3 max-w-2xl text-2xl leading-snug sm:text-3xl">
-                {c.personalTitle}
-              </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                {c.personalText}
-              </p>
-              <p className="mt-5 text-xs font-semibold text-primary">
-                {c.tennis} / {c.skiing}
-              </p>
-              <div className="mt-6">
-                <h3 className="font-sans text-xs font-semibold">{c.hobbiesTitle}</h3>
-                <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-                  {c.hobbies.map((hobby) => (
-                    <li key={hobby} className="text-xs text-muted-foreground">
-                      {hobby}
-                    </li>
-                  ))}
-                </ul>
+    <section className="border-t border-border">
+      <div className="page-width section-space">
+        <p className="section-kicker">{c.personalKicker}</p>
+        <h2 className="mt-3 max-w-2xl text-2xl leading-snug sm:text-3xl">
+          {c.personalTitle}
+        </h2>
+        <p className="mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          {c.personalText} {personal.note}
+        </p>
+        <div className="mt-8 grid gap-5 sm:grid-cols-3">
+          {videos.map(({ file, label }) => (
+            <figure key={file} className="min-w-0">
+              <div className="overflow-hidden rounded-2xl border border-border bg-black">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                  disablePictureInPicture
+                  preload="metadata"
+                  poster={`/videos/${file}.jpg`}
+                  aria-label={label}
+                  className="aspect-square w-full object-cover object-center"
+                >
+                  <source src={`/videos/${file}.mp4`} type="video/mp4" />
+                </video>
               </div>
-            </div>
-            <svg
-              viewBox="0 0 200 200"
-              fill="none"
-              className="mx-auto w-36 text-primary"
-              aria-hidden="true"
-            >
-              <g transform="rotate(-28 85 90)" stroke="currentColor" strokeWidth="2">
-                <ellipse cx="85" cy="65" rx="30" ry="40" />
-                <path d="M65 36v57m10-65v75m10-78v80m10-78v75m10-66v58M58 45h54M56 55h58M55 65h60M57 75h56M60 85h50M67 95h36M76 104l3 22h12l3-22M80 126v43h10v-43" />
-              </g>
-              <circle
-                cx="140"
-                cy="126"
-                r="15"
-                className="fill-secondary"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <path
-                d="M130 115q14 11 20 24m-22-2q15-4 13-26m-14 68 39-91m-26 100 36-88"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        </section>
-    </>
+              <figcaption className="mt-3 font-sans text-sm font-semibold text-primary">
+                {label}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <div className="mt-8">
+          <h3 className="font-sans text-sm font-semibold">{c.hobbiesTitle}</h3>
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+            {c.hobbies.map((hobby) => (
+              <li key={hobby} className="text-sm text-muted-foreground">{hobby}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   );
 }
 
