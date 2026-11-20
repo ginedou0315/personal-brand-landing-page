@@ -75,6 +75,9 @@
 }
 
 :root {
+  --google-button-bg: oklch(1 0 0);
+  --google-button-border: oklch(0.553 0.006 155);
+  --google-button-fg: oklch(0.24 0.006 285);
   --radius: 0.5rem;
   --background: oklch(0.992 0.006 265);
   --foreground: oklch(0.26 0.055 278);
@@ -111,6 +114,9 @@
 }
 
 .dark {
+  --google-button-bg: oklch(0.21 0.003 285);
+  --google-button-border: oklch(0.65 0.008 155);
+  --google-button-fg: oklch(0.92 0.003 285);
   --background: oklch(0.2 0.045 282);
   --foreground: oklch(0.96 0.012 270);
   --card: oklch(0.26 0.05 282);
@@ -494,4 +500,10 @@
   .monogram { font-family: var(--font-display); font-size: 2rem; line-height: 1; }
   .experience-cell { transition: background-color 200ms ease; }
   .experience-cell.is-selected { background: var(--secondary); }
+  .project-card, .certification-card { transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
+  .project-card:hover, .certification-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--color-primary) 45%, var(--color-border));
+    box-shadow: 0 18px 35px -28px color-mix(in oklab, var(--color-primary) 55%, transparent);
+  }
 }
