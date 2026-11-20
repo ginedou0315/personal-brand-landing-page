@@ -33,14 +33,14 @@ export function ResumeSection({ lang }: { lang: Language }) {
           {c.educationTab}
         </Button>
       </div>
-      <div id="resume-panel" role="tabpanel" aria-labelledby={`${active}-tab`} className="mt-8">
+      <div id="resume-panel" role="tabpanel" aria-labelledby={`${active}-tab`} className="timeline mt-8">
         {items.map(([years, title, organization, description]) => (
           <article
             key={`${years}-${title}`}
-            className="grid gap-3 border-t border-border py-6 sm:grid-cols-[9rem_1fr] sm:gap-7"
+            className="timeline-card"
           >
-            <p className="text-xs font-semibold text-primary">{years}</p>
-            <div>
+            <p className="font-display text-xl text-primary">{years}</p>
+            <div className="mt-2">
               <h3 className="font-sans text-lg font-semibold">{title}</h3>
               <p className="mt-1 text-sm font-medium text-muted-foreground">{organization}</p>
               <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
