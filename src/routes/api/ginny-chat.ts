@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, type UIMessage } from "ai";
+import { convertToModelMessages, createIdGenerator, type UIMessage } from "ai";
 import { authenticateGinnyRequest } from "@/lib/ai/ginny-auth.server";
 import { buildGinnyInstructions } from "@/lib/ai/ginny-knowledge.server";
 import { createResponsesCall } from "@/lib/ai/responses.server";
@@ -22,27 +22,42 @@ function normalizeMessages(value: unknown): UIMessage[] | null {
   for (const candidate of value) {
     if (!candidate || typeof candidate !== "object") return null;
     const message = candidate as UIMessage;
-    if (typeof message.id !== "string" || !message.id || (message.role !== "user" && message.role !== "assistant") || !Array.isArray(message.parts)) {
+    if (
+      typeof message.id !== "string" ||
+      (message.role !== "user" && message.role !== "assistant") ||
+      !Array.isArray(message.parts)
+    ) {
       return null;
     }
-    const parts = textParts(message).map(part => ({ type: "text" as const, text: part.text.slice(0, 12000) }));
+    if (message.role === "user" && !message.id) return null;
+    const parts = textParts(message).map((part) => ({
+      type: "text" as const,
+      text: part.text.slice(0, 12000),
+    }));
     if (parts.length === 0) continue;
-    normalized.push({ id: message.id, role: message.role, parts });
+    normalized.push({ id: message.id || crypto.randomUUID(), role: message.role, parts });
   }
   const last = normalized.at(-1);
   if (!last || last.role !== "user") return null;
-  const question = textParts(last).map(part => part.text).join("\n").trim();
+  const question = textParts(last)
+    .map((part) => part.text)
+    .join("\n")
+    .trim();
   if (!question || question.length > MAX_QUESTION_LENGTH) return null;
   return normalized;
 }
 
 function safeStreamError(error: unknown) {
-  const status = typeof error === "object" && error !== null && "statusCode" in error
-    ? Number((error as { statusCode?: unknown }).statusCode)
-    : 0;
-  if (status === 402) return "AI usage is temporarily paused because credits need attention. Please contact the site owner.";
-  if (status === 403) return "Ginny’s AI is temporarily unavailable. Please try again later or contact Ginelle directly.";
-  if (status === 429) return "Ginny’s AI is receiving too many questions right now. Please wait a moment and try again.";
+  const status =
+    typeof error === "object" && error !== null && "statusCode" in error
+      ? Number((error as { statusCode?: unknown }).statusCode)
+      : 0;
+  if (status === 402)
+    return "AI usage is temporarily paused because credits need attention. Please contact the site owner.";
+  if (status === 403)
+    return "Ginny’s AI is temporarily unavailable. Please try again later or contact Ginelle directly.";
+  if (status === 429)
+    return "Ginny’s AI is receiving too many questions right now. Please wait a moment and try again.";
   if (status >= 500) return "Ginny’s AI is temporarily unavailable. Please try again shortly.";
   if (error instanceof Error && error.name === "AbortError") return "Stopped.";
   return "I couldn’t answer that question. Please try again or contact Ginelle directly.";
@@ -55,11 +70,17 @@ export const Route = createFileRoute("/api/ginny-chat")({
         const auth = await authenticateGinnyRequest(request);
         if (!auth.ok) return auth.response;
 
-        const body = await request.json().catch(() => null) as { messages?: unknown; language?: unknown } | null;
+        const body = (await request.json().catch(() => null)) as {
+          messages?: unknown;
+          language?: unknown;
+        } | null;
         const messages = normalizeMessages(body?.messages);
         const language = languageSearch({ lang: body?.language }).lang;
         if (!messages || !language) {
-          return Response.json({ error: "Please enter a question of up to 1,200 characters." }, { status: 400 });
+          return Response.json(
+            { error: "Please enter a question of up to 1,200 characters." },
+            { status: 400 },
+          );
         }
         const latestUserMessage = messages.at(-1)!;
         const userRow = {
@@ -73,7 +94,10 @@ export const Route = createFileRoute("/api/ginny-chat")({
           .upsert(userRow, { onConflict: "user_id,message_id" });
         if (userSaveError) {
           console.error("Could not save Ginny user message:", userSaveError.message);
-          return Response.json({ error: "Your message could not be saved. Please try again." }, { status: 500 });
+          return Response.json(
+            { error: "Your message could not be saved. Please try again." },
+            { status: 500 },
+          );
         }
 
         const apiKey = process.env["LOVABLE_API_KEY"];
@@ -92,17 +116,21 @@ export const Route = createFileRoute("/api/ginny-chat")({
 
         const response = result.toUIMessageStreamResponse({
           originalMessages: messages,
+          generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
           sendReasoning: true,
           onError: safeStreamError,
           onFinish: async ({ responseMessage }) => {
             const parts = textParts(responseMessage);
             if (parts.length === 0) return;
-            const { error } = await auth.supabase.from("ginny_messages").upsert({
-              user_id: auth.userId,
-              message_id: responseMessage.id,
-              role: "assistant",
-              parts: parts as unknown as Json,
-            }, { onConflict: "user_id,message_id" });
+            const { error } = await auth.supabase.from("ginny_messages").upsert(
+              {
+                user_id: auth.userId,
+                message_id: responseMessage.id,
+                role: "assistant",
+                parts: parts as unknown as Json,
+              },
+              { onConflict: "user_id,message_id" },
+            );
             if (error) {
               console.error("Could not save Ginny assistant message:", error.message);
               throw new Error("The answer could not be saved.");

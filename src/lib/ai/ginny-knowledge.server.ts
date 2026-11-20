@@ -1,5 +1,10 @@
 import { portfolioCopy, type Language } from "@/lib/portfolio-copy";
-import { certifications, otherProjectLinks, projectLinks, technicalSkills } from "@/lib/portfolio-content";
+import {
+  certifications,
+  otherProjectLinks,
+  projectLinks,
+  technicalSkills,
+} from "@/lib/portfolio-content";
 
 const languageNames: Record<Language, string> = {
   en: "English",
@@ -42,8 +47,14 @@ export function buildGinnyInstructions(language: Language) {
     tindaFlow: {
       status: "Prototype concept, not a deployed commercial product.",
       overview: copy.projectIntro,
-      features: { problem: copy.projectProblem, approach: copy.projectApproach, currentScope: copy.projectNow, futurePlans: copy.projectFuture },
-      scope: "The diagram distinguishes the existing interactive CRM example from future planned AI and Facebook Live capabilities.",
+      features: {
+        problem: copy.projectProblem,
+        approach: copy.projectApproach,
+        currentScope: copy.projectNow,
+        futurePlans: copy.projectFuture,
+      },
+      scope:
+        "The diagram distinguishes the existing interactive CRM example from future planned AI and Facebook Live capabilities.",
     },
   };
 
