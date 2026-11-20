@@ -1,3 +1,4 @@
+import { portraitAsset } from "@/lib/site-assets";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
@@ -20,7 +21,6 @@ import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-e
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
 import { ginnyCopy, type Language } from "@/lib/portfolio-copy";
-import portraitAsset from "@/assets/ginelle-portrait.png.asset.json";
 
 const STORAGE_KEY = "ginny-chat-v1";
 
