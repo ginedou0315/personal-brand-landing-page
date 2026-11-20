@@ -1,12 +1,4 @@
-import advancedPython from "@/assets/certifications/advanced-python.webp.asset.json";
-import advancedWebDevelopment from "@/assets/certifications/advanced-web-development.webp.asset.json";
-import aiCertificate from "@/assets/certifications/ai-certificate.webp.asset.json";
-import basicWebDevelopment from "@/assets/certifications/basic-web-development.webp.asset.json";
-import dataAnalytics from "@/assets/certifications/data-analytics.webp.asset.json";
-import introToCoding from "@/assets/certifications/intro-to-coding.webp.asset.json";
-import introToPython from "@/assets/certifications/intro-to-python.webp.asset.json";
-import introToWebDevelopment from "@/assets/certifications/intro-to-web-development.webp.asset.json";
-import pythonAi from "@/assets/certifications/python-ai.webp.asset.json";
+import { advancedPython, advancedWebDevelopment, aiCertificate, basicWebDevelopment, dataAnalytics, introToCoding, introToPython, introToWebDevelopment, pythonAi } from "@/lib/site-assets";
 
 export const GITHUB = "https://github.com/ginedou0315";
 export const TABLEAU = "https://public.tableau.com/app/profile/ginelle.doubek/vizzes";

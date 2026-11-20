@@ -1,3 +1,4 @@
+import { portraitAsset, tindacoAsset, cvAsset } from "@/lib/site-assets";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowDown,
@@ -28,9 +29,6 @@ import { ResumeSection } from "@/components/ResumeSection";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { Certifications } from "@/components/Certifications";
 import { GinnyChat } from "@/components/GinnyChat";
-import portraitAsset from "@/assets/ginelle-portrait.png.asset.json";
-import tindacoAsset from "@/assets/tindaco-logo.png.asset.json";
-import cvAsset from "@/assets/Ginelle_Doubek_Website_CV.pdf.asset.json";
 import {
   GITHUB,
   NETLIFY,
@@ -109,8 +107,8 @@ export function HomeHero({ lang }: { lang: Language }) {
                   <img
                     src={portraitAsset.url}
                     alt="Ginelle Doubek"
-                    width="1528"
-                    height="1920"
+                    width="955"
+                    height="1200"
                     className="portrait-image"
                     fetchPriority="high"
                     decoding="async"
@@ -225,15 +223,17 @@ export function TindaCoSection({ lang }: { lang: Language }) {
             </div>
             <div className="mt-7 grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr]">
               <div>
-                <img
-                  src={tindacoAsset.url}
-                  alt="TindaCo"
-                  width="1310"
-                  height="460"
-                  className="mb-6 h-auto w-full max-w-[19rem] sm:max-w-[22rem]"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <div className="mb-6 aspect-[1310/460] w-full max-w-[19rem] overflow-hidden sm:max-w-[22rem]">
+                  <img
+                    src={tindacoAsset.url}
+                    alt="TindaCo"
+                    width="1448"
+                    height="1086"
+                    className="size-full object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <h2 className="text-5xl sm:text-6xl">
                   {c.projectTitle}
                   <span className="text-primary">.</span>

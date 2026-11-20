@@ -1,7 +1,7 @@
+import { cvAsset } from "@/lib/site-assets";
 import { describe, expect, it } from "vitest";
 import { certifications, otherProjectLinks, projectLinks } from "@/lib/portfolio-content";
 import { languages, portfolioCopy, type Language } from "@/lib/portfolio-copy";
-import cvAsset from "@/assets/Ginelle_Doubek_Website_CV.pdf.asset.json";
 
 describe("Existing website content retained in the new portfolio", () => {
   it("keeps all nine unique certification credentials", () => {
