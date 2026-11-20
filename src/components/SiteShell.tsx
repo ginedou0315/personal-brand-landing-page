@@ -113,7 +113,7 @@ export function SiteShell({ page, children }: { page: PageKey; children: ReactNo
         </main>
         <footer className="relative border-t border-border">
           <div className="page-width flex flex-wrap items-center justify-between gap-3 py-6 text-xs text-muted-foreground">
-            <span className="font-script text-2xl text-primary">Ginelle Doubek</span>
+            <span className="font-script text-2xl name-gradient">Ginelle Doubek</span>
             <span>{c.location}</span>
           </div>
         </footer>
@@ -131,7 +131,7 @@ export function PageHeader({ kicker, title, intro }: { kicker: string; title: st
   return (
     <div className="page-width pt-12 sm:pt-16">
       <p className="section-kicker">{kicker}</p>
-      <h1 className="mt-3 font-script text-6xl leading-tight text-primary sm:text-7xl">{title}</h1>
+      <h1 className="mt-3 font-script text-6xl leading-tight name-gradient sm:text-7xl">{title}</h1>
       {intro && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">{intro}</p>}
     </div>
   );

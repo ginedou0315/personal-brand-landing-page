@@ -69,7 +69,7 @@ export function HomeHero({ lang }: { lang: Language }) {
               <div className="min-w-0">
                 <p className="hero-enter max-w-2xl text-xs font-semibold text-primary">{c.role}</p>
                 <h1 className="hero-enter hero-delay-1 mt-3 text-5xl leading-tight sm:text-7xl lg:text-6xl xl:text-8xl">
-                  <span className="font-script font-normal text-primary">Ginelle Doubek</span>
+                  <span className="font-script font-normal name-gradient">Ginelle Doubek</span>
                 </h1>
                 <p className="hero-enter hero-delay-1 mt-4 max-w-3xl font-display text-2xl leading-snug sm:text-4xl">
                   {c.headline}
