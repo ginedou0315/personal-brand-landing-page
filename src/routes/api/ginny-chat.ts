@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, createIdGenerator, type UIMessage } from "ai";
 import { buildGinnyInstructions } from "@/lib/ai/ginny-knowledge.server";
 import { createResponsesCall } from "@/lib/ai/responses.server";
+import { createPortfolioGuideResponse } from "@/lib/ai/portfolio-guide.server";
 import { languageSearch } from "@/lib/portfolio-copy";
 
 const MAX_MESSAGES = 40;
@@ -10,14 +11,14 @@ const MAX_QUESTION_LENGTH = 1200;
 function textParts(message: UIMessage) {
   return message.parts.filter(
     (part): part is Extract<UIMessage["parts"][number], { type: "text" }> =>
-      part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0,
+      part != null && typeof part === "object" && part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0,
   );
 }
 
 function normalizeMessages(value: unknown): UIMessage[] | null {
-  if (!Array.isArray(value) || value.length === 0 || value.length > MAX_MESSAGES) return null;
+  if (!Array.isArray(value) || value.length === 0 || value.length > 200) return null;
   const normalized: UIMessage[] = [];
-  for (const candidate of value) {
+  for (const candidate of value.slice(-MAX_MESSAGES)) {
     if (!candidate || typeof candidate !== "object") return null;
     const message = candidate as UIMessage;
     if (
@@ -79,8 +80,7 @@ export const Route = createFileRoute("/api/ginny-chat")({
         }
         const apiKey = process.env["OPENAI_API_KEY"];
         if (!apiKey) {
-          console.error("Ginny chat is missing its AI key.");
-          return Response.json({ error: "Ginny’s AI is not configured yet." }, { status: 500 });
+          return createPortfolioGuideResponse(messages, language);
         }
 
         const modelMessages = await convertToModelMessages(messages);

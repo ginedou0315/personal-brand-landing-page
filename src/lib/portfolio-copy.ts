@@ -1,5 +1,11 @@
 export const languages = { en: "English", de: "Deutsch", fr: "Français", it: "Italiano" } as const;
 export type Language = keyof typeof languages;
+export const personalVideoCopy = {
+  en: { running: "Running with baby Daniela", note: "These days, my new favourite activity is going for a run with my baby Daniela. 💜" },
+  de: { running: "Laufen mit Baby Daniela", note: "Am liebsten gehe ich inzwischen mit meinem Baby Daniela laufen." },
+  fr: { running: "Courir avec mon bébé Daniela", note: "Mon nouveau plaisir préféré : courir avec mon bébé Daniela." },
+  it: { running: "Correre con la mia bimba Daniela", note: "La mia nuova attività preferita è correre con la mia bimba Daniela." },
+} as const;
 export function isLanguage(value: unknown): value is Language {
   return typeof value === "string" && Object.prototype.hasOwnProperty.call(languages, value);
 }
@@ -95,7 +101,7 @@ const previousCopy = {
     personalKicker: "On a personal note",
     personalTitle: "A love of sport, from childhood to Switzerland.",
     personalText:
-      "Sport has always been part of my life. I used to compete, and tennis has stayed with me from childhood to today. After moving to Switzerland, I learned cross-country skiing — and came to love it, too.",
+      "Sport has always been part of my life. I used to compete, and tennis has been a constant since childhood. After moving to Switzerland, I discovered cross-country skiing and grew to love it too.",
     tennis: "Tennis",
     skiing: "Cross-country skiing",
     contactTitle: "Let’s talk about the next chapter.",
@@ -1508,13 +1514,13 @@ export type GinnyCopy = {
 
 export const ginnyCopy: Record<Language, GinnyCopy> = {
   en: {
-    kicker: "09 / Ginny’s AI",
+    kicker: "09 / Portfolio guide",
     title: "Ask Ginny about my experience.",
     intro:
       "A portfolio guide for hiring teams and collaborators, grounded in the verified information on this site.",
     privacy:
       "Ask anything right away — no sign-in needed. Your conversation stays only in this browser.",
-    cloudSaved: "Ask me anything · no sign-in needed",
+    cloudSaved: "Ask about my portfolio · no sign-in needed",
     signInTitle: "Start your conversation",
     signInText: "Choose a sign-in method. Email confirmation is required for new email accounts.",
     email: "Email address",
@@ -1568,7 +1574,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
       "Ein Portfolio-Guide für Hiring-Teams und Kooperationspartner, basierend auf den geprüften Angaben dieser Website.",
     privacy:
       "Frag direkt los – ohne Anmeldung. Dein Gespräch bleibt nur in diesem Browser.",
-    cloudSaved: "Frag mich alles · ohne Anmeldung",
+    cloudSaved: "Fragen zu meinem Portfolio · ohne Anmeldung",
     signInTitle: "Gespräch starten",
     signInText: "Wähle eine Anmeldemethode. Neue E-Mail-Konten müssen per E-Mail bestätigt werden.",
     email: "E-Mail-Adresse",
@@ -1623,7 +1629,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
       "Un guide du portfolio pour les équipes de recrutement et les collaborateurs, fondé sur les informations vérifiées de ce site.",
     privacy:
       "Posez vos questions tout de suite, sans connexion. Votre conversation reste uniquement dans ce navigateur.",
-    cloudSaved: "Posez-moi vos questions · sans connexion",
+    cloudSaved: "Questions sur mon portfolio · sans connexion",
     signInTitle: "Commencer la conversation",
     signInText:
       "Choisissez une méthode de connexion. Les nouveaux comptes e-mail doivent être confirmés.",
@@ -1681,7 +1687,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
       "Una guida al portfolio per team di recruiting e collaboratori, basata sulle informazioni verificate di questo sito.",
     privacy:
       "Fai subito le tue domande, senza accesso. La conversazione resta solo in questo browser.",
-    cloudSaved: "Chiedimi qualsiasi cosa · senza accesso",
+    cloudSaved: "Domande sul mio portfolio · senza accesso",
     signInTitle: "Inizia la conversazione",
     signInText: "Scegli un metodo di accesso. I nuovi account email richiedono una conferma.",
     email: "Indirizzo email",
