@@ -21,3 +21,14 @@ describe("Product name is TindaCo", () => {
     expect(instructions).not.toMatch(/TindaFlow/i);
   });
 });
+
+describe("Ginelle AI profile feed", () => {
+  it.each(langList)("adds the profile and response rules in %s", (lang) => {
+    const instructions = buildGinnyInstructions(lang);
+    expect(instructions).toContain("Ginelle Doubek AI");
+    expect(instructions).toContain("more than 15 years");
+    expect(instructions).toContain("International Rice Research Institute");
+    expect(instructions).toContain("maximum of 5 sentences");
+    expect(instructions).toContain("🫶");
+  });
+});
