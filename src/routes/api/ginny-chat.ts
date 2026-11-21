@@ -77,7 +77,7 @@ export const Route = createFileRoute("/api/ginny-chat")({
             { status: 400 },
           );
         }
-        const apiKey = process.env["LOVABLE_API_KEY"];
+        const apiKey = process.env["OPENAI_API_KEY"];
         if (!apiKey) {
           console.error("Ginny chat is missing its AI key.");
           return Response.json({ error: "Ginny’s AI is not configured yet." }, { status: 500 });
@@ -85,8 +85,11 @@ export const Route = createFileRoute("/api/ginny-chat")({
 
         const modelMessages = await convertToModelMessages(messages);
         const { result, wrapResponse } = createResponsesCall(
-          request,
-          { baseURL: "https://ai.gateway.lovable.dev/v1", apiKey, model: "openai/gpt-6-astra" },
+          {
+            baseURL: process.env["OPENAI_BASE_URL"] || "https://api.openai.com/v1",
+            apiKey,
+            model: process.env["OPENAI_MODEL"] || "gpt-4.1-mini",
+          },
           modelMessages,
           buildGinnyInstructions(language),
         );

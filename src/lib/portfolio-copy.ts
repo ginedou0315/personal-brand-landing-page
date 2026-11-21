@@ -1481,7 +1481,6 @@ export type GinnyCopy = {
   confirmEmail: string;
   or: string;
   google: string;
-  lovable: string;
   emptyTitle: string;
   emptyText: string;
   suggestions: string[];
@@ -1531,7 +1530,6 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     confirmEmail: "Check your email to confirm your account, then return to sign in.",
     or: "or",
     google: "Continue with Google",
-    lovable: "Continue with Lovable",
     emptyTitle: "What would you like to know about Ginelle?",
     emptyText:
       "Ask about her CRM direction, work history, projects, certifications, languages, or collaboration interests.",
@@ -1587,7 +1585,6 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
       "Bestätige dein Konto über den Link in der E-Mail und kehre dann zur Anmeldung zurück.",
     or: "oder",
     google: "Weiter mit Google",
-    lovable: "Weiter mit Lovable",
     emptyTitle: "Was möchtest du über Ginelle wissen?",
     emptyText:
       "Frage zu ihrer CRM-Ausrichtung, Berufserfahrung, Projekten, Zertifikaten, Sprachen oder Kooperationsinteressen.",
@@ -1644,7 +1641,6 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
       "Consultez votre e-mail pour confirmer votre compte, puis revenez vous connecter.",
     or: "ou",
     google: "Continuer avec Google",
-    lovable: "Continuer avec Lovable",
     emptyTitle: "Que souhaitez-vous savoir sur Ginelle ?",
     emptyText:
       "Interrogez son orientation CRM, son expérience, ses projets, ses certifications, ses langues ou ses envies de collaboration.",
@@ -1701,7 +1697,6 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     confirmEmail: "Controlla l’email per confermare l’account, poi torna ad accedere.",
     or: "oppure",
     google: "Continua con Google",
-    lovable: "Continua con Lovable",
     emptyTitle: "Cosa vorresti sapere su Ginelle?",
     emptyText:
       "Chiedi del suo percorso CRM, esperienza lavorativa, progetti, certificazioni, lingue o interessi di collaborazione.",
