@@ -1,14 +1,7 @@
-import tailwindcss from "@tailwindcss/vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
-import tsConfigPaths from "vite-tsconfig-paths";
+// Use the project's original Lovable configuration, which already includes
+// the server deployment adapter. Do not add duplicate framework plugins.
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  plugins: [
-    tsConfigPaths(),
-    tanstackStart({ server: { entry: "server" } }),
-    viteReact(),
-    tailwindcss(),
-  ],
+  tanstackStart: { server: { entry: "server" } },
 });

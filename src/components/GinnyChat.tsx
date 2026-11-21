@@ -43,7 +43,7 @@ export function GinnyChat({ lang }: { lang: Language }) {
   if (!initial)
     return (
       <div className="flex min-h-64 items-center justify-center">
-        <Shimmer>Ginny’s portfolio guide</Shimmer>
+        <Shimmer>Ginelle Doubek AI</Shimmer>
       </div>
     );
   return <GinnyConversation lang={lang} initialMessages={initial} />;
@@ -143,7 +143,7 @@ function GinnyConversation({
             className="size-9 rounded-full border border-border bg-secondary object-cover object-top"
           />
           <div>
-            <p className="text-sm font-semibold">Ginny’s portfolio guide</p>
+            <p className="text-sm font-semibold">Ginelle Doubek AI</p>
             <p className="text-[11px] text-muted-foreground">{c.cloudSaved}</p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { portfolioCopy, ginnyCopy, type Language } from "@/lib/portfolio-copy";
 import { certifications, otherProjectLinks, projectLinks, technicalSkills } from "@/lib/portfolio-content";
+import { finishConversationAnswer, getPersonalConversationAnswer, professionalConversation } from "@/lib/ginelle-conversation";
 
 type Topic = "intro" | "crm" | "experience" | "projects" | "prototype" | "education" | "certifications" | "skills" | "direction" | "languages" | "sports" | "values" | "contact";
 const rules: [Topic, RegExp][] = [
@@ -9,7 +10,7 @@ const rules: [Topic, RegExp][] = [
   ["certifications", /certif|zertif|credential/],
   ["education", /educat|degree|universit|qualif|training|learning|ausbildung|studium|weiterbildung|formation|.tudes|istruzione|formazione/],
   ["languages", /language|sprach|langue|lingu|\benglish\b|\bgerman\b|\bfilipino\b|\bdeutsch\b|\bfran.ais\b/],
-  ["sports", /sport|tennis|ski|langlauf|hobb|personal note|pers.nlich|int.r.ts|passion|interessi/],
+  ["sports", /sport|tennis|ski|langlauf|running|jogging|hobb|personal note|pers.nlich|int.r.ts|passion|interessi/],
   ["projects", /project|projekt|projet|progett|weather app|world clock|recipe|travel website|puzzle/],
   ["skills", /data analy|datenanal|power ?bi|tableau|\bpython\b|skill|toolkit|tools|technolog|strength|kompetenz|f.higkeit|st.rke|outil|comp.tence|forza|strument/],
   ["values", /values|purpose|culture|respect|werte|zweck|kultur|valeur|mission|valori|scopo/],
@@ -28,7 +29,7 @@ const normalize = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036
 const list = (items: readonly string[]) => items.map((item) => `- ${item}`).join("\n");
 
 /** Prepared answers use the same translated, public content as the website. */
-export function getPortfolioGuideAnswer(question: string, language: Language, previousQuestions: string[] = []): string {
+function getPreparedAnswer(question: string, language: Language, previousQuestions: string[] = []): string {
   const copy = portfolioCopy[language];
   const words = labels[language];
   const q = normalize(question.trim());
@@ -43,6 +44,21 @@ export function getPortfolioGuideAnswer(question: string, language: Language, pr
     for (const previous of [...previousQuestions].reverse()) {
       topic = rules.find(([, pattern]) => pattern.test(normalize(previous)))?.[0];
       if (topic) break;
+    }
+  }
+  if (language === "en") {
+    switch (topic) {
+      case "intro": return professionalConversation.intro;
+      case "experience": return professionalConversation.experience;
+      case "crm": return professionalConversation.crm;
+      case "sports": return professionalConversation.sports;
+      case "direction": return professionalConversation.direction;
+      case "projects": return "I enjoy putting new skills into practice through web development, data and CRM projects. My portfolio includes learning projects and an interactive CRM demonstration, alongside TindaCo, a prototype in development. You can explore them on my [projects page](/projects?lang=en).";
+      case "prototype": return "TindaCo is a Prototype in Development, not a launched commercial product. It explores challenges around live selling, with a separate interactive CRM demonstration in the portfolio. AI and Facebook Live capabilities are future plans, not completed functionality. You can read about the current scope on my [projects page](/projects?lang=en).";
+      case "education": return `My education includes ${copy.education.map(row => `${row[1]} at ${row[2]}`).join("; ")}. I continue learning through technical courses and hands-on projects. My [résumé](/resume?lang=en) has the full education and development record.`;
+      case "certifications": return "My portfolio includes completed training and qualifications in web development and data analytics, alongside ongoing professional development. It does not list a completed Salesforce Administrator certification. You can view the qualification details and original certificates on my [résumé](/resume?lang=en).";
+      case "skills": return "I connect international business experience with growing skills in Salesforce, data analysis, reporting and automation. My toolkit includes Excel, Power BI, Tableau, SQL and Python, alongside web development tools. I enjoy learning how to turn those tools into useful business solutions.";
+      case "values": return "I value continuous learning, work-life balance and a company that cares about its people. Respect, trust, open communication and a supportive culture matter to me. I’m looking for meaningful work in an environment where people can thrive.";
     }
   }
   switch (topic) {
@@ -61,4 +77,11 @@ export function getPortfolioGuideAnswer(question: string, language: Language, pr
     case "contact": return words.contact;
     default: return `${words.unknown}\n\n${ginnyCopy[language].emptyText}\n\n${words.contact}`;
   }
+}
+
+export function getPortfolioGuideAnswer(question: string, language: Language, previousQuestions: string[] = []): string {
+  return finishConversationAnswer(
+    getPersonalConversationAnswer(question, language) ?? getPreparedAnswer(question, language, previousQuestions),
+    language,
+  );
 }

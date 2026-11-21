@@ -1514,13 +1514,13 @@ export type GinnyCopy = {
 
 export const ginnyCopy: Record<Language, GinnyCopy> = {
   en: {
-    kicker: "09 / Portfolio guide",
-    title: "Ask Ginny about my experience.",
+    kicker: "09 / Ginelle Doubek AI",
+    title: "Let’s have a conversation.",
     intro:
-      "A portfolio guide for hiring teams and collaborators, grounded in the verified information on this site.",
+      "Meet my AI representative. Chat about my experience, projects, career goals, love of learning and life beyond work.",
     privacy:
-      "Ask anything right away — no sign-in needed. Your conversation stays only in this browser.",
-    cloudSaved: "Ask about my portfolio · no sign-in needed",
+      "No sign-in needed. Chat history is saved in this browser; when live AI is connected, your messages are processed by the AI service.",
+    cloudSaved: "My AI representative · no sign-in needed",
     signInTitle: "Start your conversation",
     signInText: "Choose a sign-in method. Email confirmation is required for new email accounts.",
     email: "Email address",
@@ -1573,7 +1573,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Ein Portfolio-Guide für Hiring-Teams und Kooperationspartner, basierend auf den geprüften Angaben dieser Website.",
     privacy:
-      "Frag direkt los – ohne Anmeldung. Dein Gespräch bleibt nur in diesem Browser.",
+      "Ohne Anmeldung. Der Chatverlauf wird in diesem Browser gespeichert; bei aktiver KI verarbeitet der KI-Dienst deine Nachrichten.",
     cloudSaved: "Fragen zu meinem Portfolio · ohne Anmeldung",
     signInTitle: "Gespräch starten",
     signInText: "Wähle eine Anmeldemethode. Neue E-Mail-Konten müssen per E-Mail bestätigt werden.",
@@ -1628,7 +1628,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Un guide du portfolio pour les équipes de recrutement et les collaborateurs, fondé sur les informations vérifiées de ce site.",
     privacy:
-      "Posez vos questions tout de suite, sans connexion. Votre conversation reste uniquement dans ce navigateur.",
+      "Sans connexion. L’historique est enregistré dans ce navigateur ; avec l’IA active, vos messages sont traités par le service d’IA.",
     cloudSaved: "Questions sur mon portfolio · sans connexion",
     signInTitle: "Commencer la conversation",
     signInText:
@@ -1686,7 +1686,7 @@ export const ginnyCopy: Record<Language, GinnyCopy> = {
     intro:
       "Una guida al portfolio per team di recruiting e collaboratori, basata sulle informazioni verificate di questo sito.",
     privacy:
-      "Fai subito le tue domande, senza accesso. La conversazione resta solo in questo browser.",
+      "Senza accesso. La cronologia è salvata in questo browser; con l’IA attiva, i messaggi vengono elaborati dal servizio di IA.",
     cloudSaved: "Domande sul mio portfolio · senza accesso",
     signInTitle: "Inizia la conversazione",
     signInText: "Scegli un metodo di accesso. I nuovi account email richiedono una conferma.",

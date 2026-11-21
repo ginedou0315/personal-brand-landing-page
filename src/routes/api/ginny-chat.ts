@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, createIdGenerator, type UIMessage } from "ai";
-import { buildGinnyInstructions } from "@/lib/ai/ginny-knowledge.server";
-import { createResponsesCall } from "@/lib/ai/responses.server";
-import { createPortfolioGuideResponse } from "@/lib/ai/portfolio-guide.server";
+import type { UIMessage } from "ai";
+import { getSheCodesAnswer } from "@/lib/ai/shecodes.server";
+import { createPortfolioGuideResponse, createConversationResponse } from "@/lib/ai/portfolio-guide.server";
+import { finishConversationAnswer } from "@/lib/ginelle-conversation";
 import { languageSearch } from "@/lib/portfolio-copy";
 
 const MAX_MESSAGES = 40;
@@ -78,29 +78,14 @@ export const Route = createFileRoute("/api/ginny-chat")({
             { status: 400 },
           );
         }
-        const apiKey = process.env["OPENAI_API_KEY"];
-        if (!apiKey) {
-          return createPortfolioGuideResponse(messages, language);
+        const apiKey = process.env["SHECODES_API_KEY"];
+        if (!apiKey) return createPortfolioGuideResponse(messages, language);
+        try {
+          const answer = await getSheCodesAnswer(messages, language, apiKey, request.signal);
+          return createConversationResponse(finishConversationAnswer(answer, language), "live-ai");
+        } catch (error) {
+          return createConversationResponse(finishConversationAnswer(safeStreamError(error), language), "live-ai");
         }
-
-        const modelMessages = await convertToModelMessages(messages);
-        const { result, wrapResponse } = createResponsesCall(
-          {
-            baseURL: process.env["OPENAI_BASE_URL"] || "https://api.openai.com/v1",
-            apiKey,
-            model: process.env["OPENAI_MODEL"] || "gpt-4.1-mini",
-          },
-          modelMessages,
-          buildGinnyInstructions(language),
-        );
-
-        const response = result.toUIMessageStreamResponse({
-          originalMessages: messages,
-          generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
-          sendReasoning: true,
-          onError: safeStreamError,
-        });
-        return wrapResponse(response);
       },
     },
   },
