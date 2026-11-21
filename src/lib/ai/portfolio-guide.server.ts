@@ -7,9 +7,13 @@ export function createPortfolioGuideResponse(messages: UIMessage[], language: La
     message.parts.filter((part) => part.type === "text").map((part) => part.type === "text" ? part.text : "").join("\n"),
   );
   const answer = getPortfolioGuideAnswer(questions.at(-1) ?? "", language, questions.slice(0, -1));
+  return createConversationResponse(answer, "portfolio-guide");
+}
+
+export function createConversationResponse(answer: string, mode: "portfolio-guide" | "live-ai") {
   const id = crypto.randomUUID();
   return createUIMessageStreamResponse({
-    headers: { "Cache-Control": "no-store", "X-Ginny-Mode": "portfolio-guide" },
+    headers: { "Cache-Control": "no-store", "X-Ginny-Mode": mode },
     stream: createUIMessageStream({
       execute({ writer }) {
         writer.write({ type: "start", messageId: crypto.randomUUID() });
