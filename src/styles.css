@@ -512,7 +512,7 @@
     margin-inline: auto;
     overflow: hidden;
     border: 1px solid color-mix(in oklab, var(--color-primary) 16%, var(--color-border));
-    border-radius: 999px 999px var(--radius-2xl) var(--radius-2xl);
+    border-radius: var(--radius-2xl);
     background: linear-gradient(155deg, var(--color-card), var(--color-secondary));
     box-shadow: 0 24px 55px -38px color-mix(in oklab, var(--color-primary) 65%, transparent);
   }
