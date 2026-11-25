@@ -97,13 +97,6 @@ function GinnyConversation({
     }
   }, [messages, busy]);
 
-  useEffect(() => {
-    if (status === "ready") textareaRef.current?.focus();
-  }, [status]);
-  useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
-
   async function ask(text: string) {
     const question = text.trim();
     if (!question || busy) return;
