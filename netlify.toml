@@ -1,0 +1,5 @@
+[build]
+  command = "bun run build"
+  # The Nitro `netlify` preset emits static assets directly into `dist`
+  # (server code goes to .netlify/functions-internal), so publish `dist`.
+  publish = "dist"
